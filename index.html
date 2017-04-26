@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>DCC 104 - Space Shooter</title>
+    <script src="sprite.js" charset="utf-8"></script>
+  </head>
+  <body>
+    <h1>DCC 104 - Space Shooter</h1>
+    <canvas id="canvas" width="600" height="500"></canvas>
+
+  </body>
+</html>
+
+<script>
+  var canvas = document.getElementsByTagName("canvas")[0];
+  var ctx = canvas.getContext("2d");
+  var nave = new Sprite(250,400,50,60,"blue");
+  var vidas = 5;
+  var pontos = 0;
+
+  desenha();
+
+
+  function desenha(){
+    var fps = 50;
+    var dt = 1 / fps;
+    requestAnimationFrame(desenha);
+    inicializar(ctx);
+    nave.mover(dt);
+    nave.desenhar(ctx);
+    habilitarControles(nave);
+  }
+
+  function inicializar(ctx){
+        nave.x = 250;
+        nave.y = 400;
+        ctx.font = "20px Arial";
+
+        //Desenha borda canvas
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.strokeRect(0, 0, canvas.width, canvas.height);
+
+        //Desenha pontos e vida
+        ctx.fillText("Vidas:" + vidas, canvas.width - 100, 30);
+        ctx.fillText("Pontos:" + pontos, canvas.width - 100, 50);
+
+        //Desenha energia
+        ctx.fillText("Energia:" + nave.energia, 40, 30);
+        ctx.fillStyle = "lime";
+        ctx.fillRect(40, 40, 170, 20);
+        ctx.strokeRect(40, 40, 170, 20);
+  }
+
+  function habilitarControles(nave) {
+        addEventListener("keydown", function (e) {
+            switch (e.keyCode) {
+                case 37:
+                    nave.vx = 250;
+                    nave.ax = 50;
+                case 39:
+                    nave.vx = 250;
+                    nave.ax = 50;
+                    break;
+                default:
+            }
+        });
+
+        addEventListener("keyup", function (e) {
+            switch (e.keyCode) {
+                case 37:
+                    break;
+                case 39:
+                    break;
+                default:
+
+            }
+        });
+    }
+
+</script>
