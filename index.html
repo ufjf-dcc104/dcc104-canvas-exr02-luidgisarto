@@ -1,41 +1,79 @@
 <!DOCTYPE html>
 <html>
-  <head>
+
+<head>
     <meta charset="utf-8">
     <title>DCC 104 - Space Shooter</title>
     <script src="sprite.js" charset="utf-8"></script>
-  </head>
-  <body>
+    <script src="level.js" charset="utf-8"></script>
+</head>
+
+<body>
     <h1>DCC 104 - Space Shooter</h1>
     <canvas id="canvas" width="600" height="500"></canvas>
 
-  </body>
+</body>
+
 </html>
 
 <script>
-  var canvas = document.getElementsByTagName("canvas")[0];
-  var ctx = canvas.getContext("2d");
-  var nave = new Sprite(250,400,50,60,"blue");
-  var vidas = 5;
-  var pontos = 0;
+    var tela = document.getElementsByTagName("canvas")[0];
+    var ctx = canvas.getContext("2d");
+    var nave = obterNaveInicial();
+    var level = new Level();
+    var vidas = 5;
+    var pontos = 0;
 
-  desenha();
+    level.inicializar();
+    desenha();
 
+    function desenha() {
+        var fps = 50;
+        var dt = 1 / fps;
+        requestAnimationFrame(desenha);
+        inicializar(ctx);
+        nave.mover(dt);
+        level.mover(dt);
 
-  function desenha(){
-    var fps = 50;
-    var dt = 1 / fps;
-    requestAnimationFrame(desenha);
-    inicializar(ctx);
-    nave.mover(dt);
-    nave.desenhar(ctx);
-    habilitarControles(nave);
-  }
+        level.colidiuCom(nave,
+            function (inimigo, alvo) {
+                inimigo.color = "green";
+            });
 
-  function inicializar(ctx){
+        nave.desenhar(ctx);
+        level.desenhar(ctx);
+        level.atingido();
+        habilitarControles(nave);
+        
+        if(atingiuExtremidades()){
+            vidas--;
+            nave = obterNaveInicial();
+            
+        }
+
+        reiniciaLevel();
+    }
+
+    function obterNaveInicial(){
+        return new Sprite(250, 400, 32, 32, "blue");
+    }
+
+    function reiniciaLevel() {
+        for (var i = 0; i < level.inimigos; i++) {
+            var inimigo = level.sprites[i];
+
+            if (inimigo.y >= tela.height) {
+                inimigo.y = 10;
+                level.inicializar();
+            }
+        }
+    }
+
+    function inicializar(ctx) {
         nave.x = 250;
         nave.y = 400;
         ctx.font = "20px Arial";
+        ctx.fillStyle = "black";
 
         //Desenha borda canvas
         ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -50,17 +88,26 @@
         ctx.fillStyle = "lime";
         ctx.fillRect(40, 40, 170, 20);
         ctx.strokeRect(40, 40, 170, 20);
-  }
+    }
 
-  function habilitarControles(nave) {
+    function atingiuExtremidades() {
+        if (nave.x < 0 || nave.x > tela.width)
+            return true;
+        else
+            return false;
+    }
+
+    function habilitarControles(nave) {
         addEventListener("keydown", function (e) {
             switch (e.keyCode) {
+                case 32:
+                    level.atirar(nave);
+                    break;
                 case 37:
-                    nave.vx = 250;
-                    nave.ax = 50;
+                    nave.vx -= 5;
+                    break;
                 case 39:
-                    nave.vx = 250;
-                    nave.ax = 50;
+                    nave.vx += 5;
                     break;
                 default:
             }
