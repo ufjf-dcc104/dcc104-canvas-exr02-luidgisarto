@@ -12,9 +12,9 @@ function Sprite(x, y, w, h, cor) {
   this.cooldown = 0;
 }
 
-Sprite.prototype.desenhar = function (ctx) {
+Sprite.prototype.desenhar = function (ctx, img) {
   ctx.fillStyle = this.color;
-  ctx.fillRect(this.x, this.y, this.width, this.height);
+  ctx.drawImage(img, this.x, this.y, this.width, this.height);
 };
 
 Sprite.prototype.mover = function (dt) {

@@ -9,21 +9,22 @@ Level.prototype.inicializar = function () {
         var inimigo = new Sprite();
         inimigo.x = 100 * i;
         inimigo.y = 10;
-        inimigo.vy = 100;
+        inimigo.vy = 200;
         inimigo.color = "red";
-        inimigo.width = 32;
-        inimigo.height = 32;
+        inimigo.width = 50;
+        inimigo.height = 50;
+        inimigo.imgkey = "inimigo";
         this.sprites.push(inimigo);
     }
 }
 
 Level.prototype.desenhar = function (ctx) {
     for (var i = 0; i < this.sprites.length; i++) {
-        this.sprites[i].desenhar(ctx);
+        this.sprites[i].desenhar(ctx, this.imageLib.images[this.sprites[i].imgkey]);
     }
 
     for (var i = 0; i < this.tiros.length; i++) {
-        this.tiros[i].desenhar(ctx);
+        this.tiros[i].desenhar(ctx, this.imageLib.images[this.tiros[i].imgkey]);
     }
 
 }
@@ -45,12 +46,13 @@ Level.prototype.atirar = function (alvo) {
     var tiro = new Sprite();
     tiro.x = alvo.x + 10;
     tiro.y = alvo.y;
-    tiro.vy = -100;
+    tiro.vy = -400;
     tiro.width = 8;
     tiro.height = 16;
     tiro.color = "orange";
+    tiro.imgkey = "tiro";
     this.tiros.push(tiro);
-    alvo.cooldown = 1;
+    alvo.cooldown = 0;
 }
 
 Level.prototype.colidiuCom = function (alvo, resolveColisao) {

@@ -6,11 +6,12 @@
     <title>DCC 104 - Space Shooter</title>
     <script src="sprite.js" charset="utf-8"></script>
     <script src="level.js" charset="utf-8"></script>
+    <script src="images.js" charset="utf-8"></script>
 </head>
 
 <body>
     <h1>DCC 104 - Space Shooter</h1>
-    <canvas id="canvas" width="600" height="500"></canvas>
+    <canvas id="canvas" width="600" height="500" style="background-image: url('images/fundo.png');"></canvas>
 
 </body>
 
@@ -21,14 +22,16 @@
     var ctx = canvas.getContext("2d");
     var nave = obterNaveInicial();
     var level = new Level();
+    var il = new ImageLoader();
     var vidas = 5;
     var pontos = 0;
-
+    il.inicializar();
+    level.imageLib = il;
     level.inicializar();
     desenha();
 
     function desenha() {
-        var fps = 50;
+        var fps = 120;
         var dt = 1 / fps;
         requestAnimationFrame(desenha);
         inicializar(ctx);
@@ -40,7 +43,7 @@
                 inimigo.color = "green";
             });
 
-        nave.desenhar(ctx);
+        nave.desenhar(ctx, il.images["nave"]);
         level.desenhar(ctx);
         level.atingido();
         habilitarControles(nave);
@@ -55,7 +58,7 @@
     }
 
     function obterNaveInicial(){
-        return new Sprite(250, 400, 32, 32, "blue");
+        return new Sprite(250, 400, 50,50, "blue");
     }
 
     function reiniciaLevel() {
@@ -73,7 +76,7 @@
         nave.x = 250;
         nave.y = 400;
         ctx.font = "20px Arial";
-        ctx.fillStyle = "black";
+        ctx.fillStyle = "white";
 
         //Desenha borda canvas
         ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -103,11 +106,11 @@
                 case 32:
                     level.atirar(nave);
                     break;
-                case 37:
-                    nave.vx -= 5;
+                case 65:
+                    nave.vx -= 10;
                     break;
-                case 39:
-                    nave.vx += 5;
+                case 68:
+                    nave.vx += 10;
                     break;
                 default:
             }
@@ -115,9 +118,9 @@
 
         addEventListener("keyup", function (e) {
             switch (e.keyCode) {
-                case 37:
+                case 65:
                     break;
-                case 39:
+                case 68:
                     break;
                 default:
 
