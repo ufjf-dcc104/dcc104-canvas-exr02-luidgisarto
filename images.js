@@ -11,5 +11,5 @@ ImageLoader.prototype.load = function (key, imgURL) {
 ImageLoader.prototype.inicializar = function (){
     this.load("nave", "images/nave.png");
     this.load("inimigo", "images/inimigo.png");
-    this.load("tiro", "images/tiro.png");
+    this.load("tiro", "images/tiro2.png");
 }

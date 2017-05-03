@@ -12,9 +12,7 @@
 <body>
     <h1>DCC 104 - Space Shooter</h1>
     <canvas id="canvas" width="600" height="500" style="background-image: url('images/fundo.png');"></canvas>
-
 </body>
-
 </html>
 
 <script>
@@ -54,21 +52,16 @@
             
         }
 
-        reiniciaLevel();
+        reiniciaInimigos();
     }
 
     function obterNaveInicial(){
         return new Sprite(250, 400, 50,50, "blue");
     }
 
-    function reiniciaLevel() {
-        for (var i = 0; i < level.inimigos; i++) {
-            var inimigo = level.sprites[i];
-
-            if (inimigo.y >= tela.height) {
-                inimigo.y = 10;
-                level.inicializar();
-            }
+    function reiniciaInimigos() {
+        if(level.sprites.length == 0){
+            level.inicializar();
         }
     }
 

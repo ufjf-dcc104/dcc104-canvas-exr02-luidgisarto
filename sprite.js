@@ -7,14 +7,23 @@ function Sprite(x, y, w, h, cor) {
   this.ax = 0;
   this.vy = 0;
   this.ay = 0;
+  this.angulo = 0;
   this.color = cor;
   this.energia = 300;
   this.cooldown = 0;
 }
 
 Sprite.prototype.desenhar = function (ctx, img) {
+  ctx.save();
   ctx.fillStyle = this.color;
   ctx.drawImage(img, this.x, this.y, this.width, this.height);
+  ctx.translate(this.x, this.y);
+  ctx.rotate(this.angulo + Math.PI / 2);
+  ctx.beginPath();
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+  ctx.restore()
 };
 
 Sprite.prototype.mover = function (dt) {
