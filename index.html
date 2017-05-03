@@ -27,10 +27,11 @@
     level.imageLib = il;
     level.inicializar();
     desenha();
-
+    var fps = 60;
+    var dt = 1 / fps;
+    habilitarControles(nave);
     function desenha() {
-        var fps = 120;
-        var dt = 1 / fps;
+
         requestAnimationFrame(desenha);
         inicializar(ctx);
         nave.mover(dt);
@@ -44,13 +45,8 @@
         nave.desenhar(ctx, il.images["nave"]);
         level.desenhar(ctx);
         level.atingido();
-        habilitarControles(nave);
-        
-        if(atingiuExtremidades()){
-            vidas--;
-            nave = obterNaveInicial();
-            
-        }
+
+
 
         reiniciaInimigos();
     }
@@ -66,8 +62,7 @@
     }
 
     function inicializar(ctx) {
-        nave.x = 250;
-        nave.y = 400;
+
         ctx.font = "20px Arial";
         ctx.fillStyle = "white";
 
@@ -95,15 +90,16 @@
 
     function habilitarControles(nave) {
         addEventListener("keydown", function (e) {
+          console.log(e.keyCode);
             switch (e.keyCode) {
                 case 32:
                     level.atirar(nave);
                     break;
                 case 65:
-                    nave.vx -= 10;
+                    nave.vx = 100;
                     break;
                 case 68:
-                    nave.vx += 10;
+                    nave.vx = 100;
                     break;
                 default:
             }
