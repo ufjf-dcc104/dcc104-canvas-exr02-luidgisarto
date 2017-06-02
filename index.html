@@ -26,9 +26,8 @@
     il.inicializar();
     level.imageLib = il;
     level.inicializar();
+    var dt = 1 / 60;
     desenha();
-    var fps = 60;
-    var dt = 1 / fps;
     habilitarControles(nave);
     function desenha() {
 
@@ -37,22 +36,24 @@
         nave.mover(dt);
         level.mover(dt);
 
+        nave.desenhar(ctx, il.images["nave"]);
+        level.desenhar(ctx);
+
+        if(level.atingido()){
+            console.log("teste");
+        }
+        
         level.colidiuCom(nave,
             function (inimigo, alvo) {
                 inimigo.color = "green";
             });
 
-        nave.desenhar(ctx, il.images["nave"]);
-        level.desenhar(ctx);
-        level.atingido();
-
-
-
         reiniciaInimigos();
+
     }
 
     function obterNaveInicial(){
-        return new Sprite(250, 400, 50,50, "blue");
+        return new Sprite(300, 400, 50,50, "blue");
     }
 
     function reiniciaInimigos() {
@@ -90,13 +91,12 @@
 
     function habilitarControles(nave) {
         addEventListener("keydown", function (e) {
-          console.log(e.keyCode);
             switch (e.keyCode) {
                 case 32:
                     level.atirar(nave);
                     break;
                 case 65:
-                    nave.vx = 100;
+                    nave.vx = -100;
                     break;
                 case 68:
                     nave.vx = 100;

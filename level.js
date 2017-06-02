@@ -1,5 +1,5 @@
 function Level() {
-    this.inimigos = 10;
+    this.inimigos = 7;
     this.sprites = [];
     this.tiros = [];
 }
@@ -7,10 +7,10 @@ function Level() {
 Level.prototype.inicializar = function () {
     for (var i = 0; i < this.inimigos; i++) {
         var inimigo = new Sprite();
-        inimigo.x = 20 + parseInt(Math.floor(Math.random() * 450));
-        inimigo.y = 20 + parseInt(Math.floor(Math.random() * 150));
+        inimigo.x = 20 + Math.floor(Math.random() * 450);
+        inimigo.y = 20 + Math.floor(Math.random() * 150);
         inimigo.angulo = -190;
-        inimigo.vy = 200;
+        inimigo.vy = 100;
         inimigo.color = "red";
         inimigo.width = 50;
         inimigo.height = 50;
@@ -52,15 +52,15 @@ Level.prototype.atirar = function (alvo) {
     if (alvo.cooldown > 0)
         return;
     var tiro = new Sprite();
-    tiro.x = alvo.x + 20;
-    tiro.y = alvo.y;
+    tiro.x = alvo.x;
+    tiro.y = alvo.y - 20;
     tiro.vy = -400;
     tiro.width = 10;
     tiro.height = 15;
     tiro.color = "orange";
     tiro.imgkey = "tiro";
     this.tiros.push(tiro);
-    alvo.cooldown = 0;
+    alvo.cooldown = 0.5;
 }
 
 Level.prototype.colidiuCom = function (alvo, resolveColisao) {

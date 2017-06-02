@@ -14,16 +14,19 @@ function Sprite(x, y, w, h, cor) {
 }
 
 Sprite.prototype.desenhar = function (ctx, img) {
-  ctx.save();
+  // ctx.save();
   ctx.fillStyle = this.color;
-  ctx.drawImage(img, this.x, this.y, this.width, this.height);
-  ctx.translate(this.x, this.y);
-  ctx.rotate(this.angulo + Math.PI / 2);
-  ctx.beginPath();
-  ctx.closePath();
-  ctx.fill();
-  ctx.stroke();
-  ctx.restore()
+  ctx.drawImage(img, this.x-this.width/2, this.y-this.height/2, this.width, this.height);
+  ctx.strokeStyle = "white";
+  ctx.strokeRect(this.x-this.width/2, this.y-this.height/2, this.width, this.height);
+
+  // ctx.translate(this.x, this.y);
+  // ctx.rotate(this.angulo + Math.PI / 2);
+  // ctx.beginPath();
+  // ctx.closePath();
+  // ctx.stroke();
+  // ctx.fill();
+  // ctx.restore();
 };
 
 Sprite.prototype.mover = function (dt) {
