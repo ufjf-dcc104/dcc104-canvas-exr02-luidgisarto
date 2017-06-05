@@ -13,6 +13,7 @@
     <h1>DCC 104 - Space Shooter</h1>
     <canvas id="canvas" width="600" height="500" style="background-image: url('images/fundo.png');"></canvas>
 </body>
+
 </html>
 
 <script>
@@ -39,25 +40,63 @@
         nave.desenhar(ctx, il.images["nave"]);
         level.desenhar(ctx);
 
-        if(level.atingido()){
-            console.log("teste");
+        if (level.atingido()) {
+            pontos += 2;
         }
-        
-        level.colidiuCom(nave,
-            function (inimigo, alvo) {
-                inimigo.color = "green";
-            });
+
+        if (vidas <= 0) {
+            ctx.font = "30px Arial";
+            ctx.fillStyle = "white";
+            ctx.fillText("Game Over, você fez " + pontos + " pontos", canvas.width / 5, canvas.height / 2);
+            reiniciarNave();
+        }
+        else {
+            if (level.atingiuNave(nave)) {
+                desenhaDano();
+                if (!nave.atingido) {
+                    vidas--;
+                    nave.atingido = true;
+                }
+                                
+                setTimeout(removerEscudo, 3000);
+            }
+            else if (atingiuExtremidades()) {
+                vidas--;
+                reiniciarNave();
+            }
+        }
+
+
 
         reiniciaInimigos();
 
     }
 
-    function obterNaveInicial(){
-        return new Sprite(300, 400, 50,50, "blue");
+    function removerEscudo(){
+        nave.atingido = false;
+    }
+
+    function desenhaDano() {
+        ctx.beginPath();
+        ctx.strokeStyle = "gold";
+        ctx.arc(nave.x, nave.y, 30, 0, 2 * Math.PI);
+        ctx.closePath();
+        ctx.stroke();
+    }
+
+    function reiniciarNave() {
+        nave.x = 300;
+        nave.y = 400;
+        nave.vx = 0;
+        nave.energia = 300;
+    }
+
+    function obterNaveInicial() {
+        return new Sprite(300, 400, 50, 50, "blue");
     }
 
     function reiniciaInimigos() {
-        if(level.sprites.length == 0){
+        if (level.sprites.length == 0) {
             level.inicializar();
         }
     }
@@ -97,9 +136,11 @@
                     break;
                 case 65:
                     nave.vx = -100;
+                    nave.energia --;
                     break;
                 case 68:
                     nave.vx = 100;
+                    nave.energia --;
                     break;
                 default:
             }

@@ -1,5 +1,5 @@
 function Level() {
-    this.inimigos = 7;
+    this.inimigos = 10;
     this.sprites = [];
     this.tiros = [];
 }
@@ -7,10 +7,9 @@ function Level() {
 Level.prototype.inicializar = function () {
     for (var i = 0; i < this.inimigos; i++) {
         var inimigo = new Sprite();
-        inimigo.x = 20 + Math.floor(Math.random() * 450);
+        inimigo.x = Math.floor(Math.random() * 450);
         inimigo.y = 20 + Math.floor(Math.random() * 150);
-        inimigo.angulo = -190;
-        inimigo.vy = 100;
+        inimigo.vy = 120;
         inimigo.color = "red";
         inimigo.width = 50;
         inimigo.height = 50;
@@ -22,7 +21,7 @@ Level.prototype.inicializar = function () {
 Level.prototype.desenhar = function (ctx) {
     for (var i = 0; i < this.sprites.length; i++) {
         this.sprites[i].desenhar(ctx, this.imageLib.images[this.sprites[i].imgkey]);
-        
+
     }
 
     for (var i = 0; i < this.tiros.length; i++) {
@@ -34,12 +33,12 @@ Level.prototype.desenhar = function (ctx) {
 Level.prototype.mover = function (dt) {
     for (var i = 0; i < this.sprites.length; i++) {
         var inimigo = this.sprites[i];
-        if(parseInt(inimigo.y) > 500){
+        if (parseInt(inimigo.y) > 500) {
             this.sprites.splice(this.sprites.indexOf(inimigo), 1);
         }
-        else{
+        else {
             inimigo.mover(dt);
-        }        
+        }
     }
 
     for (var i = 0; i < this.tiros.length; i++) {
@@ -54,7 +53,7 @@ Level.prototype.atirar = function (alvo) {
     var tiro = new Sprite();
     tiro.x = alvo.x;
     tiro.y = alvo.y - 20;
-    tiro.vy = -400;
+    tiro.vy = -300;
     tiro.width = 10;
     tiro.height = 15;
     tiro.color = "orange";
@@ -65,24 +64,38 @@ Level.prototype.atirar = function (alvo) {
 
 Level.prototype.colidiuCom = function (alvo, resolveColisao) {
     for (var i = 0; i < this.sprites.length; i++) {
-      if(this.sprites[i].colidiu(alvo)){
-        resolveColisao(this.sprites[i], alvo);
-      }
+        if (this.sprites[i].colidiu(alvo)) {
+            resolveColisao(this.sprites[i], alvo);
+        }
     }
 };
 
 Level.prototype.atingido = function () {
     for (var i = this.tiros.length - 1; i >= 0; i--) {
-        this.colidiuCom(this.tiros[i],
-            (
-                function (that) {
-                    return function (alvo) {
-                        alvo.color = "green";
-                        that.tiros.splice(i, 1);
-                        x = that.sprites.indexOf(alvo);
-                        that.sprites.splice(x, 1);
-                    }
-                }
-            )(this));
+        var tiro = this.tiros[i];
+
+        for (var j = 0; j < this.sprites.length; j++) {
+            var inimigo = this.sprites[j];
+
+            if (inimigo.colidiu(tiro)) {
+                this.tiros.splice(i, 1);
+                this.sprites.splice(j, 1);
+                return true;
+            }
+        }
+
+        return false;
     }
+}
+
+Level.prototype.atingiuNave = function (nave) {
+    for (var i = 0; i < this.sprites.length; i++) {
+        var inimigo = this.sprites[i];
+
+        if (inimigo.colidiu(nave)) {
+            return true;
+        }
+    }
+
+    return false;
 }
